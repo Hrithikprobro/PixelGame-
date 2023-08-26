@@ -30,11 +30,13 @@ pygame.display.set_caption('Game')
 
 text = True
 
+background_surface = pygame.surface.Surface((1280, 480))
+
 def image(path, x, y):
     img = pygame.image.load(path)
     screen.blit(img, (x, y))
 
-def Text(text, x, y):
+def text(text, x, y):
     text = font.render(text, True, (0, 0, 0))
     screen.blit(text, (x, y))
 
@@ -50,17 +52,21 @@ def draw_on_window():
                     run = False
             if event.type == MOUSEBUTTONDOWN:
                 if centerX <= mouse[0] <= centerX-35 and centerY <= mouse[1] <= centerY: 
-                    screen.fill(0, 0, 0)
+                    background_surface.fill(0, 0)
                     pygame.display.update()  
 
             #QUIT
             if event.type == pygame.QUIT:
                 run = False
             else:
-                screen.fill(sky)
+                background_surface.fill(sky)
+                screen.blit(background_surface, (0, 0))
                 mouse = pygame.mouse.get_pos()
-                Text('UnderTale', centerX - 50, centerY - 100)
+                text('UnderTale', centerX - 50, centerY - 100)
                 image('Assets\start_btn.jpg', centerX - 35, centerY)
+                image('Assets\help.jpg', 1190, 600)
+                image('Assets\floor.jpg', 0, 600)
+                #
                 pygame.display.update()
     pygame.quit()
     sys.exit()
