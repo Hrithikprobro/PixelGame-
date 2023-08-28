@@ -60,11 +60,11 @@ def draw_on_window():
             else:
                 background_surface.fill(sky)
                 screen.blit(background_surface, (0, 0))
-                image('Assets\Graphics\\floor.jpg', -10, 360)
                 mouse = pygame.mouse.get_pos()
                 text('UnderTale', centerX - 50, centerY - 100)
                 image('Assets\Graphics\play_btn.jpg', centerX - 35, centerY)
                 image('Assets\Graphics\help.jpg', 1190, 600)
+                image('Assets\Graphics\\floor.jpg', -10, 360)
                 pygame.display.update()
     pygame.quit()
     sys.exit()

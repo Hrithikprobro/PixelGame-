@@ -23,8 +23,9 @@ screen = pygame.display.set_mode((1280, 720))
 
 white = (255, 255, 255)
 sky = (135, 206, 235)
-font = pygame.font.Font('Assets\Fonts\Font.FON', 128)
+font = pygame.font.Font('.ttf', 32)
 centerX, centerY = 1280/2, 720/2
+
 pygame.display.set_caption('Game')
 
 text = True
@@ -32,7 +33,7 @@ text = True
 background_surface = pygame.surface.Surface((1280, 480))
 
 def image(path, x, y):
-    img = pygame.image.load(path).convert_alpha()
+    img = pygame.image.load(path)
     screen.blit(img, (x, y))
 
 def text(text, x, y):
@@ -60,11 +61,11 @@ def draw_on_window():
             else:
                 background_surface.fill(sky)
                 screen.blit(background_surface, (0, 0))
-                image('Assets\Graphics\\floor.jpg', -10, 360)
                 mouse = pygame.mouse.get_pos()
                 text('UnderTale', centerX - 50, centerY - 100)
-                image('Assets\Graphics\play_btn.jpg', centerX - 35, centerY)
+                image('Assets\Graphics\start_btn.jpg', centerX - 35, centerY)
                 image('Assets\Graphics\help.jpg', 1190, 600)
+                image('Assets\Graphics\\floor.jpg', 0, 400)
                 pygame.display.update()
     pygame.quit()
     sys.exit()
