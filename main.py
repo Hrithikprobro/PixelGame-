@@ -3,7 +3,7 @@ import pygame
 import sys
 import random
 
-from pygame.sprite import AbstractGroup
+from button import Button
 
 # Initialize pygame
 pygame.init()
@@ -68,9 +68,12 @@ class Cloud(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self, centerX, centerY):
         super(Player, self).__init__()
-        self.surf = pygame.image.load("Assets/Graphics/play_btn.jpg").convert()
-        self.surf.set_colorkey((255, 255, 255), RLEACCEL)
-        self.rect = self.surf.get_rect()
+        self.surf = pygame.image.load("Assets/Graphics/player.jpg").convert()
+        self.images = []
+        self.images.append(pygame.image.load('Assets/Graphics/player.jpg'))
+        self.images.append(pygame.image.load('Assets/Graphics/player2.jpg'))
+        self.index = 0
+        self.rect = pygame.Rect(5, 5, 150, 198)
     
     def update(self, pressed_keys):
         if pressed_keys:
@@ -91,6 +94,17 @@ class Player(pygame.sprite.Sprite):
             self.rect.top = 0
         if self.rect.bottom >= ScrY:
             self.rect.bottom = ScrY
+
+        self.index += 1
+ 
+        #if the index is larger than the total images
+        if self.index >= len(self.images):
+            #we will make the index to 0 again
+            self.index = 0
+        
+        #finally we will update the image that will be displayed
+        self.image = self.images[self.index]
+ 
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -124,8 +138,44 @@ all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
 clouds = pygame.sprite.Group()
 
+def get_font(size): # Returns Press-Start-2P in the desired size
+    return pygame.font.Font("Assets/Fonts/Font.FON", size)
 
-def main():
+def main_menu():
+    while True:
+        screen.fill(sky)
+
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+        MENU_TEXT = get_font(100).render("MAIN MENU", True, "#b68f40")
+        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+
+        PLAY_BUTTON = Button(image=pygame.image.load("Assets/Graphics/Play Rect.png"), pos=(640, 250), 
+                            text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+        QUIT_BUTTON = Button(image=pygame.image.load("Assets/Graphics/Quit Rect.png"), pos=(640, 400), 
+                            text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+
+        screen.blit(MENU_TEXT, MENU_RECT)
+
+        for button in [PLAY_BUTTON, QUIT_BUTTON]:
+            button.changeColor(MENU_MOUSE_POS)
+            button.update(screen)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    play()
+                if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+
+def play():
     run = True
 
     while run:
@@ -179,7 +229,7 @@ def main():
     pygame.quit()
     sys.exit()
 
-main()
+main_menu()
 
 if __name__ == '__main__':
-    main()
+    main_menu()
