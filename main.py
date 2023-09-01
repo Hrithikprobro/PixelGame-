@@ -44,6 +44,26 @@ floor_surface.fill(lightgreen)
 def text(text, x, y):
     text = font.render(text, True, (0, 0, 0))
     screen.blit(text, (x, y))
+
+class Cloud(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Cloud, self).__init__()
+        self.surf = pygame.image.load("cloud.png").convert()
+        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+        # The starting position is randomly generated
+        self.rect = self.surf.get_rect(
+            center=(
+                random.randint(ScrX + 20, ScrY + 100),
+                random.randint(0, ScrX),
+            )
+        )
+
+    # Move the cloud based on a constant speed
+    # Remove the cloud when it passes the left edge of the screen
+    def update(self):
+        self.rect.move_ip(-5, 0)
+        if self.rect.right < 0:
+            self.kill()
         
 class Player(pygame.sprite.Sprite):
     def __init__(self, centerX, centerY):
@@ -95,11 +115,15 @@ FPS = 60
 
 ADDENEMY = pygame.USEREVENT + 1
 pygame.time.set_timer(ADDENEMY, 1500)
+ADDCLOUD = pygame.USEREVENT + 2
+pygame.time.set_timer(ADDCLOUD, 1000)
 
 player = Player(centerX, centerY)
 enemies = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
+clouds = pygame.sprite.Group()
+
 
 def main():
     run = True
